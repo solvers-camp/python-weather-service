@@ -4,6 +4,7 @@ from weather_service import (
     get_current_location,
     get_default_location,
     get_current_weather,
+    get_api_url_response,
 )
 from logging.config import dictConfig
 
@@ -39,10 +40,20 @@ class Weather(Resource):
             location = get_default_location()
         app.logger.info("Location received as : {}".format(location))  
         return get_current_weather(location)
+    
+
+class User(Resource):
+  
+    def get(self):
+        data = get_api_url_response('https://reqres.in/api/users/2')
+        app.logger.info("User data received as : {}".format(data))  
+        return data
 
           
 # adding the defined resources along with their corresponding urls
 api.add_resource(Weather, '/api/v1/weather')
+
+api.add_resource(User, '/api/v1/user')
 
 # driver function
 if __name__ == '__main__':
