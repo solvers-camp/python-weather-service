@@ -7,6 +7,8 @@ on:
     branches:
       - main
   workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 0'
 
 jobs:
   python-job:
@@ -34,4 +36,19 @@ jobs:
         run: |
             python -m pytest
 
+      - name: Save AppMaps
+        uses: actions/cache/save@v3
+        if: always()
+        with:
+          path: ./tmp/appmap
+          key: appmaps-${{ github.sha }}-${{ github.run_attempt }}
 
+  appmap-analysis:
+    if: always()
+    needs: [ python-job ]
+    uses: getappmap/analyze-action/.github/workflows/appmap-analysis.yml@v1
+    permissions:
+      actions: read
+      contents: read
+      checks: write
+      pull-requests: write
