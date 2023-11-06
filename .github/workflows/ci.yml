@@ -7,6 +7,8 @@ on:
     branches:
       - main
   workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 0'
 
 permissions: 
   # Allows the EndBug/add-and-commit step to commit the package manager changes,
